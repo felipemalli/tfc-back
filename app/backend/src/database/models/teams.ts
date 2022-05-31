@@ -2,17 +2,11 @@ import { DataTypes, Model } from 'sequelize/types';
 import db from '.';
 
 class teams extends Model {
-  username: string;
-  role: string;
-  email: string;
-  password: string;
+  team_name: string;
 }
 
 teams.init({
-  username: DataTypes.STRING,
-  role: DataTypes.STRING,
-  email: DataTypes.STRING,
-  password: DataTypes.STRING,
+  team_name: DataTypes.STRING,
 }, {
   sequelize: db,
   modelName: 'teams',

@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable @typescript-eslint/naming-convention */
 import { DataTypes, Model } from 'sequelize/types';
 import db from '.';
 
