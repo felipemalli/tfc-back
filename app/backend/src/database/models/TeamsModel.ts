@@ -1,12 +1,12 @@
 import { DataTypes, Model } from 'sequelize/types';
 import db from '.';
 
-class teams extends Model {
-  team_name: string;
+class Teams extends Model {
+  teamName: string;
 }
 
-teams.init({
-  team_name: DataTypes.STRING,
+Teams.init({
+  teamName: DataTypes.STRING,
 }, {
   sequelize: db,
   modelName: 'teams',
@@ -14,4 +14,4 @@ teams.init({
   timestamps: false,
 });
 
-export default teams;
+export default Teams;
