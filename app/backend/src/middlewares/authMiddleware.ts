@@ -11,7 +11,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const SECRET = jwtConfig.secret;
     const decoded = verify(token, SECRET);
 
-    req.body = decoded;
+    req.body.authToken = decoded;
 
     next();
   } catch (err) {
