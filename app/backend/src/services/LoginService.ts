@@ -8,8 +8,7 @@ import UnauthorizedError from '../error/UnauthorizedError';
 
 export default class LoginService {
   async login(email: string, password: string): Promise<ILoggedUser | null> {
-    const userFind = await UsersModel
-      .findOne({ where: { email } });
+    const userFind = await UsersModel.findOne({ where: { email } });
 
     if (!userFind || !compareSync(password, userFind.password)) {
       throw new UnauthorizedError('Incorrect email or password');
