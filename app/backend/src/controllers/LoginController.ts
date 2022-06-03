@@ -27,7 +27,7 @@ export default class LoginController {
     try {
       const userRole = await this.loginService.validate(email);
 
-      return res.status(200).json({ userRole });
+      return res.status(200).json(userRole);
     } catch (err) {
       next(err);
     }
