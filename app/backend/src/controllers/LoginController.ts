@@ -1,11 +1,13 @@
-/* eslint-disable class-methods-use-this */
 import { Request, Response, NextFunction } from 'express';
 import LoginService from '../services/LoginService';
 
 export default class LoginController {
   public loginService = new LoginService();
 
-  constructor() { this.login = this.login.bind(this); }
+  constructor() {
+    this.login = this.login.bind(this);
+    this.validate = this.validate.bind(this);
+  }
 
   async login(req: Request, res: Response, next: NextFunction) {
     const { email, password } = req.body;
@@ -20,7 +22,7 @@ export default class LoginController {
   }
 
   async validate(req: Request, res: Response, next: NextFunction) {
-    const { email } = req.body.authToken;
+    const { authToken: { email } } = req.body;
 
     try {
       const userRole = await this.loginService.validate(email);
