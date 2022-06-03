@@ -1,5 +1,5 @@
 class ErrorBase extends Error {
-  protected _statusCode: number;
+  public _statusCode: number;
 
   constructor(message: string) {
     super(message);
