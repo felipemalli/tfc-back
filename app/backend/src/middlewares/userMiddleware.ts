@@ -1,26 +1,30 @@
-// import { NextFunction, Request, Response } from 'express';
-// import { validateEmail, validatePassword } from '../schemas/userSchema';
+import { NextFunction, Request, Response } from 'express';
+import BadRequestError from '../error/BadRequestError';
+import UnauthorizedError from '../error/UnauthorizedError';
+import vd from '../schemas/userSchema';
 
-// const validEmail = (req:Request, res:Response, next:NextFunction) => {
-//   const { email } = req.body;
-//   const validations = validateEmail(email);
+const validEmail = (req:Request, _res:Response, next:NextFunction) => {
+  const { email } = req.body;
 
-//   if (validations.message) {
-//     return res.status(validations.code).json({ message: validations.message });
-//   }
+  switch (true) {
+    case vd.blank(email):
+      throw new BadRequestError('All fields must be filled');
+    case vd.incorrectFormat(email):
+      throw new UnauthorizedError('Incorrect email or password');
+    default: next();
+  }
+};
 
-//   next();
-// };
+const validPassword = (req:Request, res:Response, next:NextFunction) => {
+  const { password } = req.body;
 
-// const validPassword = (req:Request, res:Response, next:NextFunction) => {
-//   const { password } = req.body;
-//   const validations = validatePassword(password);
+  switch (true) {
+    case vd.blank(password):
+      throw new BadRequestError('All fields must be filled');
+    case vd.isLengthLessThan(password, 6):
+      throw new UnauthorizedError('Incorrect email or password');
+    default: next();
+  }
+};
 
-//   if (validations.message) {
-//     return res.status(validations.code).json({ message: validations.message });
-//   }
-
-//   next();
-// };
-
-// export { validEmail, validPassword };
+export { validEmail, validPassword };

@@ -1,6 +1,6 @@
 import * as express from 'express';
 import routes from './routes';
-import errorMiddleware from './middlewares/error';
+import errorMiddleware from './middlewares/errorMiddleware';
 
 class App {
   public app: express.Express;
