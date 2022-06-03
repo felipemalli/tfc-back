@@ -2,7 +2,7 @@
 import IUser from './IUser';
 
 interface ILoggedUser {
-  user: IUser;
+  user: IUser | null;
   token: string;
 }
 

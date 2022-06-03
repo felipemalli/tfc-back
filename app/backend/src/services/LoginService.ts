@@ -7,16 +7,17 @@ import jwtConfig from '../config/jwtConfig';
 import UnauthorizedError from '../error/UnauthorizedError';
 
 export default class LoginService {
-  async login(email: string, password: string): Promise<ILoggedUser> {
-    const userFind = await UsersModel.findOne({ where: { email } });
+  async login(email: string, password: string): Promise<ILoggedUser | null> {
+    const userFind = await UsersModel
+      .findOne({ where: { email } });
 
     if (!userFind || !compareSync(password, userFind.password)) {
       throw new UnauthorizedError('Incorrect email or password');
     }
 
-    const { id, username, role } = userFind;
+    const token = sign({ email }, jwtConfig.secret, jwtConfig.config);
 
-    const token = sign({ id }, jwtConfig.secret, jwtConfig.config);
+    const { id, username, role } = userFind;
 
     return {
       user: { id, username, role, email },

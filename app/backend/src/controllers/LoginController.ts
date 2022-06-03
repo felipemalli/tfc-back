@@ -9,12 +9,10 @@ export default class LoginController {
     const loginService = new LoginService();
     const { email, password } = req.body;
 
-    console.log(email);
-
     try {
       const userWithToken = await loginService.login(email, password);
 
-      return res.status(200).json({ userWithToken });
+      return res.status(200).json(userWithToken);
     } catch (err) {
       next(err);
     }
