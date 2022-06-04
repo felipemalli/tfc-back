@@ -1,1 +1,5 @@
+bcryptjs
+fs
+jsonwebtoken
+@types/jsonwebtoken@8.5.6
 cors
