@@ -2,19 +2,19 @@
 import { compareSync } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import ILoggedUser from '../interfaces/ILoggedUser';
-import UsersModel from '../database/models/UsersModel';
+import UserModel from '../database/models/UserModel';
 import jwtConfig from '../config/jwtConfig';
 import UnauthorizedError from '../error/UnauthorizedError';
 
 export default class LoginService {
   async login(email: string, password: string): Promise<ILoggedUser | null> {
-    const userFind = await UsersModel.findOne({ where: { email } });
+    const userFind = await UserModel.findOne({ where: { email } });
 
     if (!userFind || !compareSync(password, userFind.password)) {
       throw new UnauthorizedError('Incorrect email or password');
     }
 
-    if (!userFind) throw new UnauthorizedError('Incorrect email or password');
+    // if (!userFind) throw new UnauthorizedError('Incorrect email or password');
 
     const token = sign({ email }, jwtConfig.secret, jwtConfig.config);
 
@@ -27,7 +27,7 @@ export default class LoginService {
   }
 
   async validate(email: string): Promise<string> {
-    const userFind = await UsersModel.findOne({ where: { email } });
+    const userFind = await UserModel.findOne({ where: { email } });
 
     if (!userFind) throw new UnauthorizedError('Incorrect email');
 
