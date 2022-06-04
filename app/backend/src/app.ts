@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as cors from 'cors';
 import routes from './routes';
 import errorMiddleware from './middlewares/errorMiddleware';
 
@@ -19,6 +20,7 @@ class App {
     };
 
     this.app.use(accessControl);
+    this.app.use(cors());
     this.app.use(express.json());
     this.app.use(routes);
     this.app.use(errorMiddleware);
