@@ -6,7 +6,7 @@ export default class TeamService {
   async getAll(): Promise<TeamModel[]> {
     const teams = await TeamModel.findAll();
 
-    if (!teams) throw new NotFound();
+    if (!teams) throw new NotFound('There is no teams!');
 
     return teams;
   }
@@ -14,7 +14,7 @@ export default class TeamService {
   async getById(id: number): Promise<TeamModel> {
     const teamFind = await TeamModel.findOne({ where: { id } });
 
-    if (!teamFind) throw new NotFound();
+    if (!teamFind) throw new NotFound('There is no team with such id!');
 
     return teamFind;
   }
