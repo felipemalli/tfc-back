@@ -1,42 +1,37 @@
-// import * as sinon from 'sinon';
-// import * as chai from 'chai';
-// // @ts-ignore
-// import chaiHttp = require('chai-http');
+import * as sinon from 'sinon';
+import * as chai from 'chai';
+// @ts-ignore
+import chaiHttp = require('chai-http');
 
-// import { app } from '../app';
-// import TeamModel from '../database/models/TeamModel';
+import { app } from '../app';
+import TeamModel from '../database/models/TeamModel';
+import teamMock from './mocks/teamMock';
 
-// import { Response } from 'superagent';
+import { Response } from 'superagent';
 
-// chai.use(chaiHttp);
+chai.use(chaiHttp);
 
-// const { expect } = chai;
+const { expect } = chai;
 
-// describe('Seu teste', () => {
+describe('GET /teams', () => {
+  let chaiHttpResponse: Response;
 
-//   let chaiHttpResponse: Response;
+  describe('When send existing inputs', () => {
+    before(async () => {
+      return sinon
+        .stub(TeamModel, "findAll")
+        .resolves(teamMock as unknown as TeamModel[]);
+    });
 
-//   before(async () => {
-//     sinon
-//       .stub(TeamModel, "findOne")
-//       .resolves({
-//         ...<Seu mock>
-//       } as TeamModel);
-//   });
+    after(()=>{
+      (TeamModel.findAll as sinon.SinonStub).restore();
+    });
 
-//   after(()=>{
-//     (Example.findOne as sinon.SinonStub).restore();
-//   })
-
-//   it('...', async () => {
-//     chaiHttpResponse = await chai
-//        .request(app)
-//        ...
-
-//     expect(...)
-//   });
-
-//   it('Seu sub-teste', () => {
-//     expect(false).to.be.eq(true);
-//   });
-// });
+    it('should receive all teams', async () => {
+      chaiHttpResponse = await chai.request(app).get('/teams');
+  
+      expect(chaiHttpResponse.status).to.be.equal(200);
+      expect(chaiHttpResponse.body).to.be.eql(teamMock);
+    });
+  });
+});

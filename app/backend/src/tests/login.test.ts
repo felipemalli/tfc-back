@@ -7,6 +7,8 @@ import { app } from '../app';
 import UserModel from '../database/models/UserModel';
 import userMock from './mocks/userMock';
 
+import * as jsonwebtoken from 'jsonwebtoken';
+
 import { Response } from 'superagent';
 
 chai.use(chaiHttp);
@@ -126,4 +128,60 @@ describe('POST /login', () => {
       expect(chaiHttpResponse.body.message).to.be.equal('Incorrect email or password');
     });
   });
+});
+
+describe('GET /login/validate', () => {
+  let chaiHttpResponse: Response;
+
+  afterEach(()=>{
+    // (UserModel.findOne as sinon.SinonStub).restore();
+    // (jsonwebtoken.verify as sinon.SinonStub).restore();
+    sinon.restore();
+  });
+
+  describe('When receive a valid token', () => {
+    before(async () => {
+      sinon.stub(jsonwebtoken, "verify")
+        .resolves({ email: userMock.userResponse.email });
+      sinon
+        .stub(UserModel, "findOne")
+        .resolves({...userMock.userResponse} as UserModel);
+    });
+
+    it('should receive the role', async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .get('/login/validate')
+        .set({authorization: userMock.userTokenResponse.token});
+  
+      expect(chaiHttpResponse).to.have.status(200);
+      expect(chaiHttpResponse.body).to.equal('admin');
+    });
+  });
+
+  // describe('When receive a invalid token', () => {
+  //   before(async () => {
+  //     sinon.stub(jsonwebtoken, "verify").rejects();
+  //   });
+
+  //   it('should receive Unauthorized error with wrong token', async () => {
+  //     chaiHttpResponse = await chai
+  //       .request(app)
+  //       .get('/login/validate')
+  //       .set({authorization: userMock.userTokenResponse.token});
+  
+  //     expect(chaiHttpResponse.status).to.be.equal(401);
+  //     expect(chaiHttpResponse.body.message).to.be.equal('Expired or invalid token');
+  //   });
+
+  //   it('should receive Unauthorized error with empty token', async () => {
+  //     chaiHttpResponse = await chai
+  //       .request(app)
+  //       .get('/login/validate')
+  //       .set({"authorization": null});
+  
+  //     expect(chaiHttpResponse.status).to.be.equal(401);
+  //     expect(chaiHttpResponse.body.message).to.be.equal('Token not found');
+  //   });
+  // });
 });
