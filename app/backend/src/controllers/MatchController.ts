@@ -7,6 +7,7 @@ export default class TeamController {
   constructor() {
     this.getAll = this.getAll.bind(this);
     this.create = this.create.bind(this);
+    this.finish = this.finish.bind(this);
   }
 
   async getAll(req: Request, res: Response, next: NextFunction) {
@@ -39,6 +40,18 @@ export default class TeamController {
       const inProgressMatch = await this.matchService.create(match);
 
       return res.status(200).json(inProgressMatch);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async finish(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+
+    try {
+      await this.matchService.finish(Number(id));
+
+      return res.status(200).json({ message: 'Finished' });
     } catch (err) {
       next(err);
     }
