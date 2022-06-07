@@ -4,6 +4,7 @@ import IMatch from '../interfaces/IMatch';
 import MatchModel from '../database/models/MatchModel';
 import TeamModel from '../database/models/TeamModel';
 import UnauthorizedError from '../error/UnauthorizedError';
+import NotFoundError from '../error/NotFoundError';
 import TeamService from './TeamService';
 
 export default class MatchService {
@@ -36,6 +37,14 @@ export default class MatchService {
   }
 
   async finish(id: number) {
+    if (!(MatchModel.findByPk(id))) throw new NotFoundError();
+
     await MatchModel.update({ inProgress: false }, { where: { id } });
+  }
+
+  async updateGoals(id: number, homeTeamGoals: number, awayTeam: number) {
+    if (!(MatchModel.findByPk(id))) throw new NotFoundError();
+
+    await MatchModel.update({ homeTeamGoals, awayTeam }, { where: { id } });
   }
 }
