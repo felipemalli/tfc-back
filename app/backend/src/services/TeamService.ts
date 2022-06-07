@@ -12,7 +12,7 @@ export default class TeamService {
   }
 
   async getById(id: number): Promise<TeamModel> {
-    const teamFind = await TeamModel.findOne({ where: { id } });
+    const teamFind = await TeamModel.findByPk(id);
 
     if (!teamFind) throw new NotFound('There is no team with such id!');
 

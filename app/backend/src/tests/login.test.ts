@@ -45,7 +45,7 @@ describe('POST /login', () => {
     });
   });
 
-  describe('When send incorrect input', () => {
+  describe('When send non-existent input', () => {
     afterEach(()=>{
       (UserModel.findOne as sinon.SinonStub).restore();
     })
