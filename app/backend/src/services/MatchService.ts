@@ -21,7 +21,7 @@ export default class MatchService {
   }
 
   async create(match: IMatch): Promise<MatchModel> {
-    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = match;
+    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = match;
 
     if (homeTeam === awayTeam) {
       throw new UnauthorizedError('It is not possible to create a match with two equal teams');
@@ -31,7 +31,7 @@ export default class MatchService {
     await this.teamService.getById(awayTeam);
 
     const matchCreated = await MatchModel
-      .create({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
+      .create({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress: true });
 
     return matchCreated;
   }
@@ -42,9 +42,9 @@ export default class MatchService {
     await MatchModel.update({ inProgress: false }, { where: { id } });
   }
 
-  async updateGoals(id: number, homeTeamGoals: number, awayTeam: number) {
+  async updateGoals(id: number, homeTeamGoals: number, awayTeamGoals: number) {
     if (!(MatchModel.findByPk(id))) throw new NotFoundError();
 
-    await MatchModel.update({ homeTeamGoals, awayTeam }, { where: { id } });
+    await MatchModel.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
   }
 }

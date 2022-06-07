@@ -8,6 +8,7 @@ export default class TeamController {
     this.getAll = this.getAll.bind(this);
     this.create = this.create.bind(this);
     this.finish = this.finish.bind(this);
+    this.updateGoals = this.updateGoals.bind(this);
   }
 
   async getAll(req: Request, res: Response, next: NextFunction) {
@@ -32,14 +33,14 @@ export default class TeamController {
   }
 
   async create(req: Request, res: Response, next: NextFunction) {
-    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = req.body;
+    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = req.body;
 
-    const match = { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress };
+    const match = { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals };
 
     try {
       const inProgressMatch = await this.matchService.create(match);
 
-      return res.status(200).json(inProgressMatch);
+      return res.status(201).json(inProgressMatch);
     } catch (err) {
       next(err);
     }
@@ -58,8 +59,7 @@ export default class TeamController {
   }
 
   async updateGoals(req: Request, res: Response, next: NextFunction) {
-    const { id } = req.params;
-    const { homeTeamGoals, awayTeamGoals } = req.body;
+    const { params: { id }, body: { homeTeamGoals, awayTeamGoals } } = req;
 
     try {
       await this.matchService.updateGoals(Number(id), homeTeamGoals, awayTeamGoals);
