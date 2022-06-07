@@ -159,29 +159,28 @@ describe('GET /login/validate', () => {
     });
   });
 
-  // describe('When receive a invalid token', () => {
-  //   before(async () => {
-  //     sinon.stub(jsonwebtoken, "verify").rejects();
-  //   });
+  describe('When receive a invalid token', () => {
+    before(async () => {
+      sinon.stub(jsonwebtoken, "verify").throws();
+    });
 
-  //   it('should receive Unauthorized error with wrong token', async () => {
-  //     chaiHttpResponse = await chai
-  //       .request(app)
-  //       .get('/login/validate')
-  //       .set({authorization: userMock.userTokenResponse.token});
+    it('should receive Unauthorized error with wrong token', async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .get('/login/validate')
+        .set({authorization: userMock.userTokenResponse.token});
   
-  //     expect(chaiHttpResponse.status).to.be.equal(401);
-  //     expect(chaiHttpResponse.body.message).to.be.equal('Expired or invalid token');
-  //   });
+      expect(chaiHttpResponse.status).to.be.equal(401);
+      expect(chaiHttpResponse.body.message).to.be.equal('Expired or invalid token');
+    });
 
-  //   it('should receive Unauthorized error with empty token', async () => {
-  //     chaiHttpResponse = await chai
-  //       .request(app)
-  //       .get('/login/validate')
-  //       .set({"authorization": null});
+    it('should receive Unauthorized error with empty token', async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .get('/login/validate');
   
-  //     expect(chaiHttpResponse.status).to.be.equal(401);
-  //     expect(chaiHttpResponse.body.message).to.be.equal('Token not found');
-  //   });
-  // });
+      expect(chaiHttpResponse.status).to.be.equal(401);
+      expect(chaiHttpResponse.body.message).to.be.equal('Token not found');
+    });
+  });
 });
