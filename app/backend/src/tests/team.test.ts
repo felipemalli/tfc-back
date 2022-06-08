@@ -39,7 +39,7 @@ describe('GET /teams', () => {
 describe('GET /teams/:id', () => {
   let chaiHttpResponse: Response;
 
-  describe('When send a correct input', () => {
+  describe('When send an existent input', () => {
     before(async () => {
       return sinon
         .stub(TeamModel, "findByPk")
@@ -50,7 +50,7 @@ describe('GET /teams/:id', () => {
       (TeamModel.findByPk as sinon.SinonStub).restore();
     });
 
-    it('should receive a team by id', async () => {
+    it('should receive a team by id when sending an existing id by URL', async () => {
       chaiHttpResponse = await chai.request(app).get('/teams/1');
   
       expect(chaiHttpResponse.status).to.be.equal(200);
@@ -69,7 +69,7 @@ describe('GET /teams/:id', () => {
       (TeamModel.findByPk as sinon.SinonStub).restore();
     });
 
-    it('should receive Not Found error when sending non-existing id', async () => {
+    it('should receive Not Found error when sending a non-existing id by URL', async () => {
       chaiHttpResponse = await chai.request(app).get('/teams/1');
 
       expect(chaiHttpResponse.status).to.be.equal(404);

@@ -18,7 +18,7 @@ const { expect } = chai;
 describe('POST /login', () => {
   let chaiHttpResponse: Response;
 
-  describe('When send existing inputs', () => {
+  describe('When send an existent input', () => {
     before(async () => {
       sinon
         .stub(UserModel, "findOne")
@@ -45,7 +45,7 @@ describe('POST /login', () => {
     });
   });
 
-  describe('When send non-existent input', () => {
+  describe('When send a non-existent input', () => {
     afterEach(()=>{
       (UserModel.findOne as sinon.SinonStub).restore();
     })
