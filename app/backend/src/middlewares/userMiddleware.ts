@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import BadRequestError from '../error/BadRequestError';
 import UnauthorizedError from '../error/UnauthorizedError';
-import vd from '../schemas/userSchema';
+import vd from '../schemas/validationSchema';
 
 const validEmail = (req:Request, _res:Response, next:NextFunction) => {
   const { email } = req.body;
