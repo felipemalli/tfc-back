@@ -1,11 +1,9 @@
 import MatchModel from '../database/models/MatchModel';
 import TeamService from './TeamService';
-import MatchService from './MatchService';
 import ldUtilities from '../utils/leaderboardUtilities';
 
 export default class LeaderboardService {
   public teamService = new TeamService();
-  public matchService = new MatchService();
 
   async getAll() {
     const teams = await this.teamService.getAll();
