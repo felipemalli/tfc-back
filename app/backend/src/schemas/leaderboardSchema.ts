@@ -1,15 +1,33 @@
-import ILeaderboard from '../interfaces/ILeaderboard';
+import IMatch from '../interfaces/IMatch';
 
 const leaderboardSchema = {
-  // findName: (value:string) => (!value),
+  leaderboardPattern: () => ({
+    name: '',
+    totalPoints: 0,
+    totalGames: 0,
+    totalVictories: 0,
+    totalDraws: 0,
+    totalLosses: 0,
+    goalsFavor: 0,
+    goalsOwn: 0,
+    goalsBalance: 0,
+    efficiency: 0,
+  }),
 
-  leaderboardSort: (leaderboard: ILeaderboard[]) => leaderboard.sort((a, b) => (
-    b.totalPoints - a.totalPoints
-    || b.totalVictories - a.totalVictories
-    || b.goalsBalance - a.goalsBalance
-    || b.goalsFavor - a.goalsFavor
-    || a.goalsOwn - b.goalsOwn
-  )),
+  defineTypeGoals: (match: IMatch, teamId: number) => {
+    let alliedGoals = 0;
+    let rivalGoals = 0;
+
+    if (match.homeTeam === teamId) {
+      alliedGoals = match.homeTeamGoals;
+      rivalGoals = match.awayTeamGoals;
+    } else {
+      alliedGoals = match.awayTeamGoals;
+      rivalGoals = match.homeTeamGoals;
+    }
+
+    return { alliedGoals, rivalGoals };
+  },
 };
 
 export default leaderboardSchema;

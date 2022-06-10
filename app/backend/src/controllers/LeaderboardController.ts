@@ -7,6 +7,17 @@ export default class TeamController {
   constructor() {
     this.getAllHome = this.getAllHome.bind(this);
     this.getAllAway = this.getAllAway.bind(this);
+    this.getAll = this.getAll.bind(this);
+  }
+
+  async getAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const leaderboard = await this.leaderboardService.getAll();
+
+      return res.status(200).json(leaderboard);
+    } catch (err) {
+      next(err);
+    }
   }
 
   async getAllHome(req: Request, res: Response, next: NextFunction) {

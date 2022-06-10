@@ -14,8 +14,6 @@ export default class LoginService {
       throw new UnauthorizedError('Incorrect email or password');
     }
 
-    // if (!userFind) throw new UnauthorizedError('Incorrect email or password');
-
     const token = sign({ email }, jwtConfig.secret, jwtConfig.config);
 
     const { id, username, role } = userFind;
