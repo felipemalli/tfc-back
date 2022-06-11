@@ -1,7 +1,7 @@
 const teamResponse = [
     {
       "id": 1,
-      "teamName": "Avaí/Kindermann"
+      "teamName": "São Paulo"
     },
     {
       "id": 2,
@@ -13,4 +13,4 @@ const teamResponse = [
     },
 ]
 
-export default teamResponse;
+export default { teamResponse };

@@ -26,7 +26,7 @@ export default class TeamController {
         default: matches = await this.matchService.getAll();
       }
 
-      return res.status(201).json(matches);
+      return res.status(200).json(matches);
     } catch (err) {
       next(err);
     }

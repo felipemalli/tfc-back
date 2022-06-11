@@ -37,13 +37,17 @@ export default class MatchService {
   }
 
   async finish(id: number) {
-    if (!(MatchModel.findByPk(id))) throw new NotFoundError();
+    if (!(await MatchModel.findByPk(id))) {
+      throw new NotFoundError('There is no match with such id!');
+    }
 
     await MatchModel.update({ inProgress: false }, { where: { id } });
   }
 
   async updateGoals(id: number, homeTeamGoals: number, awayTeamGoals: number) {
-    if (!(MatchModel.findByPk(id))) throw new NotFoundError();
+    if (!(await MatchModel.findByPk(id))) {
+      throw new NotFoundError('There is no match with such id!');
+    }
 
     await MatchModel.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
   }

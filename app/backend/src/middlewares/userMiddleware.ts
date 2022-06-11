@@ -1,15 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import BadRequestError from '../error/BadRequestError';
 import UnauthorizedError from '../error/UnauthorizedError';
-import vdSchema from '../schemas/validationSchema';
+import userVdSchema from '../schemas/userValidationSchema';
 
 const validEmail = (req:Request, _res:Response, next:NextFunction) => {
   const { email } = req.body;
 
   switch (true) {
-    case vdSchema.blank(email):
+    case userVdSchema.blank(email):
       throw new BadRequestError('All fields must be filled');
-    case vdSchema.incorrectFormat(email):
+    case userVdSchema.incorrectFormat(email):
       throw new UnauthorizedError('Incorrect email or password');
     default: next();
   }
@@ -19,9 +19,9 @@ const validPassword = (req:Request, res:Response, next:NextFunction) => {
   const { password } = req.body;
 
   switch (true) {
-    case vdSchema.blank(password):
+    case userVdSchema.blank(password):
       throw new BadRequestError('All fields must be filled');
-    case vdSchema.isLengthLessThan(password, 6):
+    case userVdSchema.isLengthLessThan(password, 6):
       throw new UnauthorizedError('Incorrect email or password');
     default: next();
   }

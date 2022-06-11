@@ -1,6 +1,6 @@
 const regexEmail = /\S+@\S+\.\S+/;
 
-const validationSchema = {
+const userValidationSchema = {
   blank: (value:string) => (!value),
 
   incorrectFormat: (value:string) => !regexEmail.test(value),
@@ -8,4 +8,4 @@ const validationSchema = {
   isLengthLessThan: (value:string, min:number) => (value.length < min),
 };
 
-export default validationSchema;
+export default userValidationSchema;

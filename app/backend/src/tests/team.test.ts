@@ -13,67 +13,67 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('GET /teams', () => {
+describe('Teams', () => {
   let chaiHttpResponse: Response;
 
-  describe('When searching', () => {
-    before(async () => {
-      return sinon
-        .stub(TeamModel, "findAll")
-        .resolves(teamMock as unknown as TeamModel[]);
-    });
-
-    after(()=>{
-      (TeamModel.findAll as sinon.SinonStub).restore();
-    });
-
-    it('should receive all teams', async () => {
-      chaiHttpResponse = await chai.request(app).get('/teams');
+  describe('GET /teams', () => {
+    describe('When searching', () => {
+      before(async () => {
+        return sinon
+          .stub(TeamModel, "findAll")
+          .resolves(teamMock.teamResponse as TeamModel[]);
+      });
   
-      expect(chaiHttpResponse.status).to.be.equal(200);
-      expect(chaiHttpResponse.body).to.be.eql(teamMock);
+      after(()=>{
+        (TeamModel.findAll as sinon.SinonStub).restore();
+      });
+  
+      it('should receive all teams', async () => {
+        chaiHttpResponse = await chai.request(app).get('/teams');
+    
+        expect(chaiHttpResponse.status).to.be.equal(200);
+        expect(chaiHttpResponse.body).to.be.eql(teamMock.teamResponse);
+      });
     });
   });
-});
-
-describe('GET /teams/:id', () => {
-  let chaiHttpResponse: Response;
-
-  describe('When send an existent input', () => {
-    before(async () => {
-      return sinon
-        .stub(TeamModel, "findByPk")
-        .resolves(teamMock[0] as unknown as TeamModel);
-    });
-
-    after(()=>{
-      (TeamModel.findByPk as sinon.SinonStub).restore();
-    });
-
-    it('should receive a team by id when sending an existing id by URL', async () => {
-      chaiHttpResponse = await chai.request(app).get('/teams/1');
   
-      expect(chaiHttpResponse.status).to.be.equal(200);
-      expect(chaiHttpResponse.body).to.be.eql(teamMock[0]);
+  describe('GET /teams/:id', () => {
+    describe('When send an existent input', () => {
+      before(async () => {
+        return sinon
+          .stub(TeamModel, "findByPk")
+          .resolves(teamMock.teamResponse[0] as TeamModel);
+      });
+  
+      after(()=>{
+        (TeamModel.findByPk as sinon.SinonStub).restore();
+      });
+  
+      it('should receive a team by id when sending an existing id by URL', async () => {
+        chaiHttpResponse = await chai.request(app).get('/teams/1');
+    
+        expect(chaiHttpResponse.status).to.be.equal(200);
+        expect(chaiHttpResponse.body).to.be.eql(teamMock.teamResponse[0]);
+      });
     });
-  });
-
-  describe('When send a non-existent input', () => {
-    before(async () => {
-      return sinon
-        .stub(TeamModel, "findByPk")
-        .resolves(null);
-    });
-
-    after(()=>{
-      (TeamModel.findByPk as sinon.SinonStub).restore();
-    });
-
-    it('should receive Not Found error when sending a non-existing id by URL', async () => {
-      chaiHttpResponse = await chai.request(app).get('/teams/1');
-
-      expect(chaiHttpResponse.status).to.be.equal(404);
-      expect(chaiHttpResponse.body.message).to.be.equal('There is no team with such id!');
+  
+    describe('When send a non-existent input', () => {
+      before(async () => {
+        return sinon
+          .stub(TeamModel, "findByPk")
+          .resolves(null);
+      });
+  
+      after(()=>{
+        (TeamModel.findByPk as sinon.SinonStub).restore();
+      });
+  
+      it('should receive a Not Found error when sending a non-existing id by URL', async () => {
+        chaiHttpResponse = await chai.request(app).get('/teams/1');
+  
+        expect(chaiHttpResponse.status).to.be.equal(404);
+        expect(chaiHttpResponse.body.message).to.be.equal('There is no team with such id!');
+      });
     });
   });
 });
