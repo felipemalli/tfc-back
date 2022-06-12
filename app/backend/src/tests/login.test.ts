@@ -135,7 +135,7 @@ describe('Login', () => {
       sinon.restore();
     });
   
-    describe('When send a valid token', () => {
+    describe('When send a valid token and existent input', () => {
       before(async () => {
         sinon.stub(jsonwebtoken, "verify")
           .resolves({ email: userMock.userResponse.email });
@@ -143,8 +143,8 @@ describe('Login', () => {
           .stub(UserModel, "findOne")
           .resolves(userMock.userResponse as UserModel);
       });
-  
-      it('should receive the role', async () => {
+
+      it('should receive the role when sending correct token and email', async () => {
         chaiHttpResponse = await chai
           .request(app)
           .get('/login/validate')
@@ -154,13 +154,33 @@ describe('Login', () => {
         expect(chaiHttpResponse.body).to.equal('admin');
       });
     });
+
+    describe('When send a valid token and non-existent input', () => {
+      before(async () => {
+        sinon.stub(jsonwebtoken, "verify")
+          .resolves({ email: userMock.userIncorrectInput.email });
+        sinon
+          .stub(UserModel, "findOne")
+          .resolves(null);
+      });
+
+      it('should receive an Unauthorized error when sending incorrect email', async () => {
+        chaiHttpResponse = await chai
+          .request(app)
+          .get('/login/validate')
+          .set({authorization: userMock.userTokenResponse.token});
+
+        expect(chaiHttpResponse.status).to.be.equal(401);
+        expect(chaiHttpResponse.body.message).to.be.equal('Incorrect email');
+      });
+    });
   
     describe('When send a invalid token', () => {
       before(async () => {
         sinon.stub(jsonwebtoken, "verify").throws();
       });
   
-      it('should receive an Unauthorized error with wrong token', async () => {
+      it('should receive an Unauthorized error when sending wrong token', async () => {
         chaiHttpResponse = await chai
           .request(app)
           .get('/login/validate')

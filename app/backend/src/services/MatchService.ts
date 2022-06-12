@@ -17,6 +17,9 @@ export default class MatchService {
         { model: TeamModel, as: 'teamHome', attributes: ['teamName'] },
         { model: TeamModel, as: 'teamAway', attributes: ['teamName'] },
       ] });
+
+    if (matches.length === 0) throw new NotFoundError('There is no matches!');
+
     return matches;
   }
 

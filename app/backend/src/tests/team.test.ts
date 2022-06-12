@@ -18,21 +18,26 @@ describe('Teams', () => {
 
   describe('GET /teams', () => {
     describe('When searching', () => {
-      before(async () => {
-        return sinon
-          .stub(TeamModel, "findAll")
-          .resolves(teamMock.teamResponse as TeamModel[]);
-      });
-  
-      after(()=>{
+      afterEach(()=>{
         (TeamModel.findAll as sinon.SinonStub).restore();
       });
   
       it('should receive all teams', async () => {
+        sinon.stub(TeamModel, "findAll").resolves(teamMock.teamResponse as TeamModel[]);
+
         chaiHttpResponse = await chai.request(app).get('/teams');
     
         expect(chaiHttpResponse.status).to.be.equal(200);
         expect(chaiHttpResponse.body).to.be.eql(teamMock.teamResponse);
+      });
+
+      it('should receive a Not Found error if there are no teams', async () => {
+        sinon.stub(TeamModel, "findAll").resolves([]);
+
+        chaiHttpResponse = await chai.request(app).get('/teams');
+    
+        expect(chaiHttpResponse.status).to.be.equal(404);
+        expect(chaiHttpResponse.body.message).to.be.equal('There is no teams!');
       });
     });
   });

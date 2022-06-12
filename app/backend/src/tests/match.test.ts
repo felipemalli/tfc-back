@@ -19,21 +19,26 @@ describe('Matches', () => {
 
   describe('GET /matches', () => {
     describe('When not send a query string', () => {
-      before(async () => {
-        return sinon
-          .stub(MatchModel, "findAll")
-          .resolves(matchMock.matchTeamResponse as MatchModel[]);
-      });
-  
-      after(()=>{
+      afterEach(()=>{
         (MatchModel.findAll as sinon.SinonStub).restore();
       });
   
       it('should receive all matches', async () => {
+        sinon.stub(MatchModel, "findAll").resolves(matchMock.matchTeamResponse as MatchModel[]);
+
         chaiHttpResponse = await chai.request(app).get('/matches');
     
         expect(chaiHttpResponse.status).to.be.equal(200);
         expect(chaiHttpResponse.body).to.be.eql(matchMock.matchTeamResponse);
+      });
+
+      it('should receive a Not Found error if there are no matches', async () => {
+        sinon.stub(MatchModel, "findAll").resolves([]);
+
+        chaiHttpResponse = await chai.request(app).get('/matches');
+    
+        expect(chaiHttpResponse.status).to.be.equal(404);
+        expect(chaiHttpResponse.body.message).to.be.equal('There is no matches!');
       });
     });
 
@@ -171,8 +176,8 @@ describe('Matches', () => {
           }
         );
   
-        expect(chaiHttpResponse.body.message).to.be.equal('All fields must be filled');
         expect(chaiHttpResponse.status).to.be.equal(400);
+        expect(chaiHttpResponse.body.message).to.be.equal('All fields must be filled');
 
         chaiHttpResponse = await chai.request(app).post('/matches').send(
           { 
@@ -183,8 +188,8 @@ describe('Matches', () => {
           }
         );
   
-        expect(chaiHttpResponse.body.message).to.be.equal('All fields must be filled');
         expect(chaiHttpResponse.status).to.be.equal(400);
+        expect(chaiHttpResponse.body.message).to.be.equal('All fields must be filled');
       });
 
       it('should receive a Bad Request error when not sending homeTeamGoals or awayTeamGoals', async () => {
@@ -197,8 +202,8 @@ describe('Matches', () => {
           }
         );
         
-        expect(chaiHttpResponse.body.message).to.be.equal('All fields must be filled');
         expect(chaiHttpResponse.status).to.be.equal(400);
+        expect(chaiHttpResponse.body.message).to.be.equal('All fields must be filled');
 
        chaiHttpResponse = await chai.request(app).post('/matches').send(
           { 
@@ -209,8 +214,8 @@ describe('Matches', () => {
           }
         );
         
-        expect(chaiHttpResponse.body.message).to.be.equal('All fields must be filled');
         expect(chaiHttpResponse.status).to.be.equal(400);
+        expect(chaiHttpResponse.body.message).to.be.equal('All fields must be filled');
       });
 
       it('should receive a Bad Request error when not sending a number for homeTeam or awayTeam', async () => {
@@ -223,8 +228,8 @@ describe('Matches', () => {
           }
         );
   
-        expect(chaiHttpResponse.body.message).to.be.equal('There is at least one incorrect value');
         expect(chaiHttpResponse.status).to.be.equal(400);
+        expect(chaiHttpResponse.body.message).to.be.equal('There is at least one incorrect value');
 
         chaiHttpResponse = await chai.request(app).post('/matches').send(
           { 
@@ -235,8 +240,8 @@ describe('Matches', () => {
           }
         );
   
-        expect(chaiHttpResponse.body.message).to.be.equal('There is at least one incorrect value');
         expect(chaiHttpResponse.status).to.be.equal(400);
+        expect(chaiHttpResponse.body.message).to.be.equal('There is at least one incorrect value');
       });
 
       it('should receive a Bad Request error when not sending a number for homeTeamGoals or awayTeamGoals', async () => {
@@ -249,8 +254,8 @@ describe('Matches', () => {
           }
         );
         
-        expect(chaiHttpResponse.body.message).to.be.equal('There is at least one incorrect value');
         expect(chaiHttpResponse.status).to.be.equal(400);
+        expect(chaiHttpResponse.body.message).to.be.equal('There is at least one incorrect value');
 
        chaiHttpResponse = await chai.request(app).post('/matches').send(
           { 
@@ -261,8 +266,22 @@ describe('Matches', () => {
           }
         );
         
-        expect(chaiHttpResponse.body.message).to.be.equal('There is at least one incorrect value');
         expect(chaiHttpResponse.status).to.be.equal(400);
+        expect(chaiHttpResponse.body.message).to.be.equal('There is at least one incorrect value');
+      });
+
+      it('should receive a UnauthorizedError error when sending homeTeam equal to awayTeam', async () => {
+        chaiHttpResponse = await chai.request(app).post('/matches').send(
+          { 
+            homeTeam: '1', 
+            awayTeam: '1',
+            homeTeamGoals: matchMock.matchCorrectInput.homeTeamGoals,
+            awayTeamGoals: matchMock.matchCorrectInput.awayTeamGoals,
+          }
+        );
+  
+        expect(chaiHttpResponse.status).to.be.equal(401);
+        expect(chaiHttpResponse.body.message).to.be.equal('It is not possible to create a match with two equal teams');
       });
     });
   });
@@ -305,8 +324,8 @@ describe('Matches', () => {
       it('should receive Not Found error when sending a non-existing id by URL', async () => {
         chaiHttpResponse = await chai.request(app).patch('/matches/1/finish');
   
-        expect(chaiHttpResponse.body.message).to.be.equal('There is no match with such id!');
         expect(chaiHttpResponse.status).to.be.equal(404);
+        expect(chaiHttpResponse.body.message).to.be.equal('There is no match with such id!');
       });
     });
   });
