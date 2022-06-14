@@ -4,6 +4,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
+
 import UserModel from '../database/models/UserModel';
 import userMock from './mocks/userMock';
 

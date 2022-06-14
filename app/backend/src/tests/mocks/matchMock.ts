@@ -7,14 +7,48 @@ const matchCorrectInput: IMatch = {
   awayTeamGoals: 0,
 }
 
-const matchResponse: IMatch = {
-  id: 1,
-  homeTeam: 1,
-  awayTeam: 2,
-  homeTeamGoals: 3,
-  awayTeamGoals: 0,
-  inProgress: true,
-}
+const matchResponse: IMatch[] = [
+  {
+    id: 1,
+    homeTeam: 1,
+    awayTeam: 2,
+    homeTeamGoals: 1,
+    awayTeamGoals: 1,
+    inProgress: false,
+  },
+  {
+    id: 2,
+    homeTeam: 2,
+    awayTeam: 3,
+    homeTeamGoals: 0,
+    awayTeamGoals: 2,
+    inProgress: false,
+  },
+  {
+    id: 3,
+    homeTeam: 3,
+    awayTeam: 1,
+    homeTeamGoals: 3,
+    awayTeamGoals: 1,
+    inProgress: false,
+  },
+    {
+    id: 4,
+    homeTeam: 1,
+    awayTeam: 2,
+    homeTeamGoals: 4,
+    awayTeamGoals: 3,
+    inProgress: false,
+  },
+  {
+    id: 5,
+    homeTeam: 3,
+    awayTeam: 2,
+    homeTeamGoals: 2,
+    awayTeamGoals: 5,
+    inProgress: false,
+  },
+]
 
 const matchTeamResponse: IMatch[] = [
   {
@@ -117,11 +151,3 @@ export default {
   matchTeamInProgressResponse,
   matchTeamNotInProgressResponse,
 }
-
-// export default { 
-//   matchCorrectInput,
-//   matchCreateResponse,
-//   matchResponse, 
-//   matchInProgressTrueResponse, 
-//   matchInProgressFalseResponse,
-// }

@@ -4,6 +4,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
+
 import MatchModel from '../database/models/MatchModel';
 import TeamModel from '../database/models/TeamModel';
 import matchMock from './mocks/matchMock';
@@ -14,7 +15,7 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Matches', () => {
+describe('Match', () => {
   let chaiHttpResponse: Response;
 
   describe('GET /matches', () => {
@@ -110,7 +111,7 @@ describe('Matches', () => {
       before(async () => {
         return sinon
           .stub(MatchModel, "create")
-          .resolves(matchMock.matchResponse as MatchModel);
+          .resolves(matchMock.matchResponse[0] as MatchModel);
       });
   
       after(()=>{
@@ -121,7 +122,7 @@ describe('Matches', () => {
         chaiHttpResponse = await chai.request(app).post('/matches').send(matchMock.matchCorrectInput);
     
         expect(chaiHttpResponse.status).to.be.equal(201);
-        expect(chaiHttpResponse.body).to.be.eql(matchMock.matchResponse);
+        expect(chaiHttpResponse.body).to.be.eql(matchMock.matchResponse[0]);
       });
     });
   
@@ -294,7 +295,7 @@ describe('Matches', () => {
           .resolves(true as any);
         sinon
           .stub(MatchModel, "findByPk")
-          .resolves(matchMock.matchResponse as MatchModel);
+          .resolves(matchMock.matchResponse[0] as MatchModel);
       });
   
       after(()=>{
@@ -338,7 +339,7 @@ describe('Matches', () => {
           .resolves(true as any);
         sinon
           .stub(MatchModel, "findByPk")
-          .resolves(matchMock.matchResponse as MatchModel);
+          .resolves(matchMock.matchResponse[0] as MatchModel);
       });
   
       after(()=>{

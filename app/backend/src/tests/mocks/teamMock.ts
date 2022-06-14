@@ -1,4 +1,6 @@
-const teamResponse = [
+import ITeam from '../../interfaces/ITeam';
+
+const teamResponse: ITeam[] = [
     {
       "id": 1,
       "teamName": "São Paulo"

@@ -4,6 +4,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
+
 import TeamModel from '../database/models/TeamModel';
 import teamMock from './mocks/teamMock';
 
@@ -13,7 +14,7 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Teams', () => {
+describe('Team', () => {
   let chaiHttpResponse: Response;
 
   describe('GET /teams', () => {
